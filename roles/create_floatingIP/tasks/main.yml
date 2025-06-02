@@ -1,0 +1,14 @@
+---
+# tasks file for create_floatingIP
+- name: stop STONITH
+  ansible.builtin.command: pcs property set stonith-enabled=false
+  when: inventory_hostname == 'node1'
+
+- name: Ignore quorum (for 2 nodes setup)
+  ansible.builtin.command: pcs property set no-quorum-policy=ignore
+  when: inventory_hostname == 'node1'
+
+- name: Create a floating IP
+  ansible.builtin.command: >
+    pcs resource create ClusterIP ocf:heartbeat:IPaddr2 ip=192.168.230.201 cidr_netmask=32 op monitor interval=30s
+  when: inventory_hostname == "node1"

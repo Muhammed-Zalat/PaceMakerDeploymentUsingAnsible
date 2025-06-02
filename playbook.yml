@@ -1,0 +1,12 @@
+- name: Configure & install HA cluster on two nodes
+  hosts: pacemaker_servers
+  collections:
+    - community.general
+    - ansible.posix
+  vars_files:
+    - roles/conf_PaceMaker/secrets.yml
+  roles:
+    - conf_os
+    - install_PaceMaker
+    - conf_PaceMaker
+    - create_floatingIP

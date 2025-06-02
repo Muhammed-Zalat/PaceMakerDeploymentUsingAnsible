@@ -1,0 +1,31 @@
+---
+# tasks file for install_PaceMaker
+- name: Enable High Availability repository
+  ansible.builtin.command: dnf config-manager --set-enabled highavailability
+
+- name: install PaceMaker and required packages
+  yum:
+    name:
+      - pacemaker
+      - pcs
+      - psmisc
+      - policycoreutils-python-utils
+    state: present
+
+- name: configure firewalld
+  ansible.posix.firewalld:
+    service: high-availability
+    permanent: true
+    state: enabled
+
+- name: enable and start services
+  ansible.builtin.systemd:
+    name: pcsd
+    enabled: true
+    state: started
+    
+- name: Selinux permissibve
+  selinux:
+    policy: targeted
+    state: permissive
+
