@@ -6,7 +6,10 @@
   vars_files:
     - roles/conf_PaceMaker/secrets.yml
   roles:
+    - Install_NetworkManager
     - conf_os
+    - install_apache2
     - install_PaceMaker
     - conf_PaceMaker
     - create_floatingIP
+    - create_apache_resource

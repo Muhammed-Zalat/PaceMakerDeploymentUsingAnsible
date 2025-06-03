@@ -7,12 +7,12 @@
 
 - name: Authenticate pcs
   ansible.builtin.command: >
-    pcs host auth node1hb node2hb -u hacluster -p {{ hacluster_password_plain }}
+    pcs host auth Unode1hb Unode2hb -u hacluster -p {{ hacluster_password_plain }}
   when: inventory_hostname == "node1"
 
 - name: setup cluster
   ansible.builtin.command: >
-    pcs cluster setup mycluster node1hb node2hb
+    pcs cluster setup mycluster Unode1hb Unode2hb
   when: inventory_hostname == "node1"
 
 - name: start the cluster
@@ -29,3 +29,6 @@
   ansible.builtin.command: >
     corosync-cfgtool -s
   when: inventory_hostname == "node1"
+
+- name: Set default timeout for PCS resource operations
+  ansible.builtin.command: pcs resource op defaults timeout=240s

@@ -1,0 +1,20 @@
+---
+# tasks file for create_apache_resource
+- name: Check if Apache resource 'WebSite' exists
+  ansible.builtin.command: pcs resource show WebSite
+  register: pcs_resource_check
+  ignore_errors: true
+
+- name: Create Apache resource in Pacemaker cluster
+  ansible.builtin.command: >
+    pcs resource create WebSite ocf:heartbeat:apache
+    configfile=/etc/apache2/apache2.conf
+    statusurl=http://localhost/server-status
+    op monitor interval=1min
+  when: pcs_resource_check.rc != 0
+
+- name: Configure colocation (ip and apache on same host)
+  ansible.builtin.command: sudo pcs constraint colocation add WebSite with ClusterIP INFINITY
+
+- name: Configure order (Ip then Apache)
+  ansible.builtin.command: sudo pcs constraint order ClusterIP then WebSite

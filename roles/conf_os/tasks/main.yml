@@ -22,6 +22,10 @@
     autoconnect: true
   when: inventory_hostname == "node1"
 
+- name: Activate the heartbeat connection on node1
+  command: nmcli connection up pcmk-1
+  when: inventory_hostname == "node1"
+
 - name: add new connection for heartbeat for node2
   community.general.nmcli:
     conn_name: "pcmk-2"
@@ -32,6 +36,10 @@
     gw4: 10.0.0.2
     state: present
     autoconnect: true
+  when: inventory_hostname == "node2"
+
+- name: Activate the heartbeat connection on node1
+  command: nmcli connection up pcmk-2
   when: inventory_hostname == "node2"
 
 - name: configure hosts file
