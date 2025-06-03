@@ -2,21 +2,21 @@
 # tasks file for conf_os
 - name: set hostname for node1
   hostname:
-    name: node1
+    name: Unode1
   when: inventory_hostname == "node1"
 
 - name: set hostname for node2
   hostname:
-    name: node2
+    name: Unode2
   when: inventory_hostname == "node2"
 
 - name: add new connection for heartbeat for node1
   community.general.nmcli:
     conn_name: "pcmk-1"
-    ifname: ens224
+    ifname: ens37
     type: "ethernet"
     method4: "manual"
-    ip4: "10.0.0.101/24"
+    ip4: "10.0.0.11/24"
     gw4: 10.0.0.2
     state: present
     autoconnect: true
@@ -25,10 +25,10 @@
 - name: add new connection for heartbeat for node2
   community.general.nmcli:
     conn_name: "pcmk-2"
-    ifname: ens224
+    ifname: ens37
     type: "ethernet"
     method4: "manual"
-    ip4: "10.0.0.102/24"
+    ip4: "10.0.0.12/24"
     gw4: 10.0.0.2
     state: present
     autoconnect: true
@@ -38,7 +38,7 @@
   ansible.builtin.blockinfile:
     path: /etc/hosts
     block: |
-      192.168.230.142  node1
-      192.168.230.143  node2
-      10.0.0.101       node1hb
-      10.0.0.102       node2hb
+      192.168.230.145  Unode1
+      192.168.230.147  Unode2
+      10.0.0.11        Unode1hb
+      10.0.0.12        Unode2hb
